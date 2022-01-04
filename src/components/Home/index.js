@@ -19,6 +19,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import newsData from "../../data";
 // import { Button } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
@@ -186,6 +187,7 @@ export default class index extends React.Component {
     </Menu>
   );
   render() {
+    const data = newsData.articles;
     return (
       <>
         <Box sx={{ flexGrow: 1 }}>
@@ -268,24 +270,16 @@ export default class index extends React.Component {
         </Box>
 
         {/* cards */}
-        <Container fixed sx={{marginTop:'100px'}}>
+        <Container fixed sx={{ marginTop: "100px" }}>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={4}>
-              <Grid item xs={3}>
-                <Card />
-              </Grid>
-              <Grid item xs={3}>
-                <Card />
-              </Grid>
-              <Grid item xs={3}>
-                <Card />
-              </Grid>
-              <Grid item xs={3}>
-                <Card />
-              </Grid>
-              <Grid item xs={3}>
-                <Card />
-              </Grid>
+              {data.map((data) => {
+                return (
+                  <Grid item xs={3}>
+                    <Card newsData={data} />
+                  </Grid>
+                );
+              })}
             </Grid>
           </Box>
         </Container>
