@@ -2,67 +2,62 @@ import * as React from "react";
 import Card from "@mui/material/Card";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
-import Collapse from "@mui/material/Collapse";
 import Typography from "@mui/material/Typography";
-// import newsData from "../../data";
-
-// // const ExpandMore = styled((props) => {
-// //   const { expand, ...other } = props;
-// //   return <IconButton {...other} />;
-// // })(({ theme, expand }) => ({
-// //   transform: !expand ? 'rotate(0deg)' : 'rotate(180deg)',
-// //   marginLeft: 'auto',
-// //   transition: theme.transitions.create('transform', {
-// //     duration: theme.transitions.duration.shortest,
-// //   }),
-// // }));
-
+import Button from "@mui/material/Button";
 class index extends React.Component {
-  // export class index extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       author,
       content,
-      description,
+      // description,
       publishedAt,
-      source,
+      // source,
       title,
       url,
       urlToImage,
     } = this.props.newsData;
     return (
-      <div>
-        <Card sx={{ width: 275 }}>
-          <CardMedia
-            component="img"
-            height="194"
-            image={urlToImage}
-            alt="Paella dish"
-          />
-          <CardContent>
-            <Typography
-              sx={{
-                marginBottom: "20px",
-                // display: "blo",
-                // justifyContent: "space-between",
-                fontSize: "10px",
-              }}
-            >
-              <p sx={{ fontSize: "10px" }}>
-                Author: <b>{author}</b>
-              </p>
-              <p>published at : {publishedAt}</p>
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              {content}
-            </Typography>
-          </CardContent>
-        </Card>
-      </div>
+      <Card sx={{ marginBottom: '1rem',width: 275, minHeight: "35rem", position: "relative" }}>
+        <CardMedia
+          component="img"
+          height="194"
+          image={urlToImage}
+          alt="Paella dish"
+        />
+        <CardContent>
+          <Typography>
+            {title.length >= 81 ? `${title.slice(0, 81)}...` : title}
+          </Typography>
+          <Typography
+            sx={{
+              marginBottom: "20px",
+              fontSize: "10px",
+            }}
+          >
+            <p sx={{ fontSize: "10px" }}>
+              Author: <b>{author === null ? "N/A" : author}</b>
+            </p>
+            <p>published at : {publishedAt === null ? "N/A" : publishedAt}</p>
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {content === "" ? 'N/A': content.length >= 200 ? `${content.slice(0, 200)}...` : content}
+          </Typography>
+          <Button
+            target="_blank"
+            sx={{
+              marginTop: "10px",
+              position: "absolute",
+              bottom: "15px",
+              left: "16px",
+            }}
+            href={url}
+            variant="contained"
+            size="small"
+          >
+            Read More
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 }

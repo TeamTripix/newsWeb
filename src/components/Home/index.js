@@ -1,4 +1,3 @@
-// import React, { Component } from "react";
 import Card from "../Card";
 import Grid from "@mui/material/Grid";
 import Container from "@mui/material/Container";
@@ -19,8 +18,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import newsData from "../../data";
-// import { Button } from "@mui/material";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -52,7 +49,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -64,22 +60,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default class index extends React.Component {
   constructor() {
-    // console.log("hello")
     super();
     this.state = {
-      // button: false
+      newsData: [],
+      search: "",
       anchorEl: null,
       mobileMoreAnchorEl: null,
     };
   }
-  // const [anchorEl, setAnchorEl] = React.useState(null);
-  // const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
-  // isMenuOpen = Boolean(this.state.anchorEl);
-  // isMobileMenuOpen = Boolean(this.state.mobileMoreAnchorEl);
-
-  // isMenuOpen = this.state.anchorEl;
-  // isMobileMenuOpen = this.state.mobileMoreAnchorEl;
+  componentDidMount() {
+    async function fetchNewsJSON() {
+      const response = await fetch(
+        "https://newsapi.org/v2/everything?domains=wsj.com&apiKey=71bab885d6a74a6cbf66ec6b09dd296c"
+      );
+      const data = await response.json();
+      return data;
+    }
+    fetchNewsJSON().then((news) => {
+      this.setState({
+        newsData: news.articles,
+      });
+    });
+  }
 
   handleProfileMenuOpen = (event) => {
     this.setState({
@@ -101,22 +104,20 @@ export default class index extends React.Component {
   };
 
   handleMobileMenuOpen = (event) => {
-    // setMobileMoreAnchorEl(event.currentTarget);
     this.setState({
       mobileMoreAnchorEl: event.currentTarget,
     });
   };
 
-  // handleButtonClick = ()=>{
-  //   this.setState({
-  //     button:true
-  //   })
-  // }
+  onChangeSearchBar = (event) => {
+    this.setState({
+      search: event.target.value,
+    });
+  };
 
   menuId = "primary-search-account-menu";
   renderMenu = (
     <Menu
-      // anchorEl={this.state.anchorEl}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",
@@ -138,7 +139,6 @@ export default class index extends React.Component {
   mobileMenuId = "primary-search-account-menu-mobile";
   renderMobileMenu = (
     <Menu
-      // anchorEl={this.state.mobileMoreAnchorEl}
       anchorOrigin={{
         vertical: "top",
         horizontal: "right",
@@ -187,7 +187,8 @@ export default class index extends React.Component {
     </Menu>
   );
   render() {
-    const data = newsData.articles;
+    const data = this.state.newsData;
+    // const data = newsData.articles
     return (
       <>
         <Box sx={{ flexGrow: 1 }}>
@@ -215,8 +216,9 @@ export default class index extends React.Component {
                   <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  placeholder="Search…"
+                  placeholder="Search by title"
                   inputProps={{ "aria-label": "search" }}
+                  onChange={this.onChangeSearchBar}
                 />
               </Search>
               <Box sx={{ flexGrow: 1 }} />
@@ -273,20 +275,38 @@ export default class index extends React.Component {
         <Container fixed sx={{ marginTop: "100px" }}>
           <Box sx={{ flexGrow: 1 }}>
             <Grid container spacing={4}>
-              {data.map((data) => {
-                return (
-                  <Grid item xs={3}>
-                    <Card newsData={data} />
-                  </Grid>
-                );
-              })}
+              {data
+                .filter((data) => {
+                  if (this.state.search === "") {
+                    console.log("if nothing in search input");
+                    return data;
+                  } else if (
+                    data.title
+                      .toString()
+                      .toLowerCase()
+                      .includes(this.state.search.toLowerCase())
+                  ) {
+                    console.log("if search input value is equal to card title");
+                    return data;
+                  } else {
+                    const noResultFound = ["no reskhjjjbb"];
+                    console.log("if no result found");
+                  }
+                })
+                .map((data) => {
+                  if ([data].length) {
+                    return (
+                      <Grid item xs={3}>
+                        <Card newsData={data} />
+                      </Grid>
+                    );
+                  } else {
+                    return "no result found";
+                  }
+                })}
             </Grid>
           </Box>
         </Container>
-        {/* <Button onClick={this.handleButtonClick}>
-          click
-        </Button>
-        {this.state.button === true ? <h1>clicked</h1>:""} */}
       </>
     );
   }
