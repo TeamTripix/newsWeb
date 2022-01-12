@@ -62,6 +62,7 @@ export default class index extends React.Component {
   constructor() {
     super();
     this.state = {
+      cardInRow: 3,
       newsData: [],
       search: "",
       anchorEl: null,
@@ -81,6 +82,26 @@ export default class index extends React.Component {
       this.setState({
         newsData: news.articles,
       });
+    });
+
+    window.addEventListener("resize", (event) => {
+      if (window.innerWidth <= 1200 && window.innerWidth > 900) {
+        this.setState({
+          cardInRow: 4,
+        });
+      } else if (window.innerWidth <= 900 && window.innerWidth > 600) {
+        this.setState({
+          cardInRow: 6,
+        });
+      } else if (window.innerWidth <= 600) {
+        this.setState({
+          cardInRow: 12,
+        });
+      } else if (window.innerWidth > 1200) {
+        this.setState({
+          cardInRow: 3,
+        });
+      }
     });
   }
 
@@ -188,7 +209,6 @@ export default class index extends React.Component {
   );
   render() {
     const data = this.state.newsData;
-    // const data = newsData.articles
     return (
       <>
         <Box sx={{ flexGrow: 1 }}>
@@ -278,7 +298,6 @@ export default class index extends React.Component {
               {data
                 .filter((data) => {
                   if (this.state.search === "") {
-                    console.log("if nothing in search input");
                     return data;
                   } else if (
                     data.title
@@ -286,17 +305,19 @@ export default class index extends React.Component {
                       .toLowerCase()
                       .includes(this.state.search.toLowerCase())
                   ) {
-                    console.log("if search input value is equal to card title");
                     return data;
                   } else {
-                    const noResultFound = ["no reskhjjjbb"];
-                    console.log("if no result found");
+                    // return ""
                   }
                 })
                 .map((data) => {
                   if ([data].length) {
                     return (
-                      <Grid item xs={3}>
+                      <Grid
+                        item
+                        xs={this.state.cardInRow}
+                        sx={{ display: "flex", justifyContent: "center" }}
+                      >
                         <Card newsData={data} />
                       </Grid>
                     );
