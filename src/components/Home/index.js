@@ -18,6 +18,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
+import data from "../../data"
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -62,6 +63,7 @@ export default class index extends React.Component {
   constructor() {
     super();
     this.state = {
+      dummyData:data,
       cardInRow: 3,
       newsData: [],
       search: "",
@@ -208,7 +210,8 @@ export default class index extends React.Component {
     </Menu>
   );
   render() {
-    const data = this.state.newsData;
+    // const data = this.state.newsData;
+    const data = this.state.dummyData.articles
     return (
       <>
         <Box sx={{ flexGrow: 1 }}>
